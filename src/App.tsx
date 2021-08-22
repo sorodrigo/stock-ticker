@@ -10,19 +10,21 @@ function App() {
   const [items, setItems] = useState<string[]>([]);
   const [stocks, setStocks] = useState<any[]>([]);
   useEffect(() => {
-    getIndicesConstituents(indexName).then((res) => {
-      setItems(res.data.constituents);
-    });
+    getIndicesConstituents(indexName)
+      .then((res) => {
+        setItems(res.data.constituents);
+      })
+      .catch((error) => console.error(error));
   }, []);
 
   useEffect(() => {
     const pages = getPagesByPageCursor(items, pageCursor);
-    Promise.all(pages.map((item: string) => getStockQuote(item))).then(
-      (res: any[]) => {
+    Promise.all(pages.map((item: string) => getStockQuote(item)))
+      .then((res: any[]) => {
         const newStocks = getStocks(res, indexName);
         setStocks(newStocks);
-      }
-    );
+      })
+      .catch((error) => console.error(error));
   }, [items, pageCursor]);
 
   useEffect(() => {
@@ -37,11 +39,11 @@ function App() {
         setPageCursor((cursor) => cursor + 1);
       }
     };
-    const timeout = setTimeout(updateCursor, 1000);
+    const timeout = setTimeout(updateCursor, 4000);
     return () => {
       clearTimeout(timeout);
     };
-  }, [items]);
+  }, [items, pageCursor, setPageCursor]);
 
   return <StocksList stocks={stocks} />;
 }
