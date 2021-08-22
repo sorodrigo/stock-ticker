@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import StockRow from 'components/stock-row';
 import { StockRowProps } from 'components/stock-row/stock-row.component';
 import { useTrail, animated as a } from 'react-spring';
@@ -34,9 +34,13 @@ function usePaginatedItems(items: any[]): {
   return { pages: [trail1, trail2], next: () => set((s) => !s) };
 }
 
-const StocksList: React.FC<{ items: StockRowProps[] }> = (props) => {
-  const { items } = props;
-  const { pages, next } = usePaginatedItems(items);
+const StocksList: React.FC<{ stocks: StockRowProps[] }> = (props) => {
+  const { stocks } = props;
+  const { pages, next } = usePaginatedItems(stocks);
+
+  useEffect(() => {
+    next();
+  }, [stocks]);
 
   const [trail1, trail2] = pages;
   return (
@@ -44,7 +48,7 @@ const StocksList: React.FC<{ items: StockRowProps[] }> = (props) => {
       <ul>
         {trail1.map(({ x, height, ...rest }, index) => (
           <a.li
-            key={items[index].symbol}
+            key={stocks[index].symbol}
             className={styles.trailItem}
             style={{
               ...rest,
@@ -53,12 +57,12 @@ const StocksList: React.FC<{ items: StockRowProps[] }> = (props) => {
               transform: x.interpolate((x: number) => `translate3d(0,${x}px,0)`)
             }}
           >
-            <StockRow {...items[index]} />
+            <StockRow {...stocks[index]} />
           </a.li>
         ))}
         {trail2.map(({ x, height, ...rest }, index) => (
           <a.li
-            key={items[index].symbol}
+            key={stocks[index].symbol}
             className={styles.trailItem}
             style={{
               ...rest,
@@ -67,7 +71,7 @@ const StocksList: React.FC<{ items: StockRowProps[] }> = (props) => {
               transform: x.interpolate((x: number) => `translate3d(0,${x}px,0)`)
             }}
           >
-            <StockRow {...items[index + (trail1.length - 1)]} />
+            <StockRow {...stocks[index + (trail1.length - 1)]} />
           </a.li>
         ))}
       </ul>
@@ -76,7 +80,7 @@ const StocksList: React.FC<{ items: StockRowProps[] }> = (props) => {
 };
 
 StocksList.defaultProps = {
-  items: []
+  stocks: []
 };
 
 export default StocksList;

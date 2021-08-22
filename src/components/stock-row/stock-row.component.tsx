@@ -4,7 +4,7 @@ import styles from './stock-row.module.scss';
 
 export type StockRowProps = {
   symbol: string;
-  name: string;
+  indexName: string;
   currentPrice: number;
   change: number;
   percentChange: number;
@@ -17,7 +17,7 @@ export type StockRowProps = {
 const StockRow: React.FC<StockRowProps> = (props) => {
   const {
     symbol,
-    name,
+    indexName,
     currentPrice,
     change,
     percentChange,
@@ -34,7 +34,7 @@ const StockRow: React.FC<StockRowProps> = (props) => {
           <p className={styles.largeText}>{currentPrice}</p>
         </div>
         <div className={styles.subrow}>
-          <p>{name}</p>
+          <p>{indexName}</p>
           <p
             className={cx(styles.changeTextContainer, {
               [styles.up]: change > 0,
