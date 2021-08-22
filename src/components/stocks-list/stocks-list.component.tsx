@@ -4,16 +4,14 @@ import { StockRowProps } from 'components/stock-row/stock-row.component';
 import { useTrail, animated as a } from 'react-spring';
 import styles from './stocks-list.module.scss';
 
-function usePaginatedItems(items: any[]): {
+function usePaginatedItems(): {
   pages: ({ height: number; x: any } & React.StyleHTMLAttributes<any>)[][];
   next: () => void;
 } {
   const config = { mass: 5, tension: 2000, friction: 200 };
 
   const [toggle, set] = useState(true);
-  const page1 = items.slice(0, 4);
-  const page2 = items.slice(4);
-  const trail1 = useTrail(page1.length, {
+  const trail1 = useTrail(4, {
     config,
     opacity: toggle ? 1 : 0,
     x: toggle ? 0 : 20,
@@ -22,7 +20,7 @@ function usePaginatedItems(items: any[]): {
     from: { opacity: 0, x: 20, height: 0 }
   });
 
-  const trail2 = useTrail(page2.length, {
+  const trail2 = useTrail(4, {
     config,
     opacity: !toggle ? 1 : 0,
     x: !toggle ? 0 : 20,
@@ -34,47 +32,70 @@ function usePaginatedItems(items: any[]): {
   return { pages: [trail1, trail2], next: () => set((s) => !s) };
 }
 
-const StocksList: React.FC<{ stocks: StockRowProps[] }> = (props) => {
-  const { stocks } = props;
-  const { pages, next } = usePaginatedItems(stocks);
+const StocksList: React.FC<{ stocks: StockRowProps[]; pageCursor: number }> = (
+  props
+) => {
+  const { stocks, pageCursor } = props;
+  const { pages, next } = usePaginatedItems();
 
   useEffect(() => {
     next();
-  }, [stocks]);
+  }, [pageCursor]);
 
   const [trail1, trail2] = pages;
   return (
     <div className={styles.stocksList} onClick={next}>
-      <ul>
-        {trail1.map(({ x, height, ...rest }, index) => (
-          <a.li
-            key={stocks[index].symbol}
-            className={styles.trailItem}
-            style={{
-              ...rest,
-              left: 0,
-              top: index * 117,
-              transform: x.interpolate((x: number) => `translate3d(0,${x}px,0)`)
-            }}
-          >
-            <StockRow {...stocks[index]} />
-          </a.li>
-        ))}
-        {trail2.map(({ x, height, ...rest }, index) => (
-          <a.li
-            key={stocks[index].symbol}
-            className={styles.trailItem}
-            style={{
-              ...rest,
-              left: 0,
-              top: index * 117,
-              transform: x.interpolate((x: number) => `translate3d(0,${x}px,0)`)
-            }}
-          >
-            <StockRow {...stocks[index + (trail1.length - 1)]} />
-          </a.li>
-        ))}
-      </ul>
+      {stocks.length > 0 && (
+        <ul>
+          {trail1.flatMap(({ x, height, ...rest }, index) =>
+            stocks[pageCursor + index] ? (
+              <a.li
+                key={index}
+                className={styles.trailItem}
+                style={{
+                  ...rest,
+                  left: 0,
+                  top: index * 117,
+                  transform: x.interpolate(
+                    (x: number) => `translate3d(0,${x}px,0)`
+                  )
+                }}
+              >
+                <StockRow {...stocks[pageCursor + index]} />
+              </a.li>
+            ) : (
+              []
+            )
+          )}
+          {trail2.flatMap(({ x, height, ...rest }, index) =>
+            stocks[pageCursor + index + (trail1.length - 1)] ? (
+              <a.li
+                key={index + 'second'}
+                className={styles.trailItem}
+                style={{
+                  ...rest,
+                  left: 0,
+                  top: index * 117,
+                  transform: x.interpolate(
+                    (x: number) => `translate3d(0,${x}px,0)`
+                  )
+                }}
+              >
+                <StockRow
+                  {...stocks[pageCursor + index + (trail1.length - 1)]}
+                />
+              </a.li>
+            ) : (
+              []
+            )
+          )}
+        </ul>
+      )}
+      {stocks.length === 0 && (
+        <div className={styles.loading}>
+          <p>Loading...</p>
+        </div>
+      )}
     </div>
   );
 };

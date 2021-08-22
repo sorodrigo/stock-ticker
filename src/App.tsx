@@ -22,7 +22,7 @@ function App() {
     Promise.all(pages.map((item: string) => getStockQuote(item)))
       .then((res: any[]) => {
         const newStocks = getStocks(res, indexName);
-        setStocks(newStocks);
+        setStocks([...stocks, ...newStocks]);
       })
       .catch((error) => console.error(error));
   }, [items, pageCursor]);
@@ -45,7 +45,7 @@ function App() {
     };
   }, [items, pageCursor, setPageCursor]);
 
-  return <StocksList stocks={stocks} />;
+  return <StocksList stocks={stocks} pageCursor={pageCursor} />;
 }
 
 export default App;

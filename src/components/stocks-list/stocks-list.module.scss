@@ -15,4 +15,17 @@
     will-change: transform, opacity;
     pointer-events: none;
   }
+
+  .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    color: $textColor;
+
+    p {
+      font-size: 22px;
+    }
+  }
 }
