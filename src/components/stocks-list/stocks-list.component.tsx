@@ -4,20 +4,6 @@ import { StockRowProps } from 'components/stock-row/stock-row.component';
 import { useTrail, animated as a } from 'react-spring';
 import styles from './stocks-list.module.scss';
 
-const items: StockRowProps[] = Array(8)
-  .fill(0)
-  .map((_, index) => ({
-    symbol: `${index * 1111}`,
-    name: 'Apple',
-    currentPrice: 111,
-    change: 12,
-    percentChange: 1.2,
-    highPrice: 120,
-    lowPrice: 101,
-    openPrice: 100,
-    previousClosePrice: 90
-  }));
-
 function usePaginatedItems(items: any[]): {
   pages: ({ height: number; x: any } & React.StyleHTMLAttributes<any>)[][];
   next: () => void;
@@ -47,8 +33,9 @@ function usePaginatedItems(items: any[]): {
 
   return { pages: [trail1, trail2], next: () => set((s) => !s) };
 }
-const StocksList: React.FC = (props) => {
-  const {} = props;
+
+const StocksList: React.FC<{ items: StockRowProps[] }> = (props) => {
+  const { items } = props;
   const { pages, next } = usePaginatedItems(items);
 
   const [trail1, trail2] = pages;
@@ -86,6 +73,10 @@ const StocksList: React.FC = (props) => {
       </ul>
     </div>
   );
+};
+
+StocksList.defaultProps = {
+  items: []
 };
 
 export default StocksList;
