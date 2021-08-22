@@ -1,0 +1,45 @@
+@import "src/styles/variables";
+
+.stockRow {
+  padding: 36px 24px;
+  background-color: $mediumBlue;
+  margin: 0 0 8px;
+  border-radius: 2px;
+  color: $textColor;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $lightBlue;
+  }
+
+  .subrow {
+    display: flex;
+    align-content: baseline;
+    justify-content: space-between;
+  }
+
+  .largeText {
+    font-weight: $textWeightBold;
+    line-height: 1.2;
+    font-size: 24px;
+  }
+
+  .changeTextContainer {
+    display: flex;
+    font-weight: $textWeightBold;
+
+    span {
+      &:first-child {
+        margin-right: 4px;
+      }
+    }
+
+    &.up {
+      color: $lightGreen;
+    }
+
+    &.down {
+      color: $lightRed;
+    }
+  }
+}
