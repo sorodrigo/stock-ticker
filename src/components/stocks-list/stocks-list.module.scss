@@ -1,7 +1,18 @@
 @import "src/styles/variables";
 
 .stocksList {
+  position: relative;
+  overflow: hidden;
+  height: 468px;
   width: 780px;
   padding: 24px 16px;
   background-color: $darkBlue;
+
+  .trailItem {
+    position: absolute;
+    height: 117px;
+    width: 100%;
+    will-change: transform, opacity;
+    pointer-events: none;
+  }
 }

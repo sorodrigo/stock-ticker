@@ -2,7 +2,7 @@ import * as React from 'react';
 import cx from 'classnames';
 import styles from './stock-row.module.scss';
 
-type Props = {
+export type StockRowProps = {
   symbol: string;
   name: string;
   currentPrice: number;
@@ -14,7 +14,7 @@ type Props = {
   previousClosePrice: number;
 };
 
-const StockRow: React.FC<Props> = (props) => {
+const StockRow: React.FC<StockRowProps> = (props) => {
   const {
     symbol,
     name,
@@ -27,7 +27,7 @@ const StockRow: React.FC<Props> = (props) => {
     previousClosePrice
   } = props;
   return (
-    <li className={styles.stockRow}>
+    <div className={styles.stockRow}>
       <div>
         <div className={styles.subrow}>
           <h2 className={styles.largeText}>{symbol}</h2>
@@ -46,7 +46,7 @@ const StockRow: React.FC<Props> = (props) => {
           </p>
         </div>
       </div>
-    </li>
+    </div>
   );
 };
 
