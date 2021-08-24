@@ -20,7 +20,7 @@ yarn start
 In order to create this widget I inspired myself in the following designs:
 
 - [Stock Widget by Anthony Nguyen](https://dribbble.com/shots/2291008-Stock-Widget)
-- [Cryptocurrency Tracker/Ticker by Glen Baku][https://dribbble.com/shots/3673913-Cryptocurrency-Tracker-Ticker]
+- [Cryptocurrency Tracker/Ticker by Glen Baku](https://dribbble.com/shots/3673913-Cryptocurrency-Tracker-Ticker)
 
 For the animation, I blatantly copied [the implementation from react-spring examples](https://codesandbox.io/s/49jsc).
 
